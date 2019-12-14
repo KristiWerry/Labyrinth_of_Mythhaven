@@ -12,6 +12,7 @@ import GameplayKit
 class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
+        //this is kristi
         let background0 = SKSpriteNode(imageNamed: "gameBackground0")
         //set the size of the background to the size of the scene
         background0.size = self.size
