@@ -17,6 +17,10 @@
 		D083E0C623A4BD7D00CC026A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D083E0C423A4BD7D00CC026A /* LaunchScreen.storyboard */; };
 		D083E0D123A4BD7E00CC026A /* Labyrinth_of_MythhavenTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D083E0D023A4BD7E00CC026A /* Labyrinth_of_MythhavenTests.swift */; };
 		D083E0DC23A4BD7E00CC026A /* Labyrinth_of_MythhavenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D083E0DB23A4BD7E00CC026A /* Labyrinth_of_MythhavenUITests.swift */; };
+		D083E0EB23A5B9F100CC026A /* monster_2.png in Resources */ = {isa = PBXBuildFile; fileRef = D083E0E923A5B9F000CC026A /* monster_2.png */; };
+		D083E0EC23A5B9F100CC026A /* monster_1.png in Resources */ = {isa = PBXBuildFile; fileRef = D083E0EA23A5B9F100CC026A /* monster_1.png */; };
+		D083E0EE23A6D22A00CC026A /* Player.swift in Sources */ = {isa = PBXBuildFile; fileRef = D083E0ED23A6D22A00CC026A /* Player.swift */; };
+		D083E0F023A6E3DD00CC026A /* Monster.swift in Sources */ = {isa = PBXBuildFile; fileRef = D083E0EF23A6E3DD00CC026A /* Monster.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +57,10 @@
 		D083E0D723A4BD7E00CC026A /* Labyrinth of MythhavenUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Labyrinth of MythhavenUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D083E0DB23A4BD7E00CC026A /* Labyrinth_of_MythhavenUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Labyrinth_of_MythhavenUITests.swift; sourceTree = "<group>"; };
 		D083E0DD23A4BD7E00CC026A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D083E0E923A5B9F000CC026A /* monster_2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = monster_2.png; sourceTree = "<group>"; };
+		D083E0EA23A5B9F100CC026A /* monster_1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = monster_1.png; sourceTree = "<group>"; };
+		D083E0ED23A6D22A00CC026A /* Player.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Player.swift; sourceTree = "<group>"; };
+		D083E0EF23A6E3DD00CC026A /* Monster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monster.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,11 +115,15 @@
 				D083E0B723A4BD7000CC026A /* GameScene.sks */,
 				D083E0B923A4BD7000CC026A /* Actions.sks */,
 				D083E0BB23A4BD7000CC026A /* GameScene.swift */,
+				D083E0ED23A6D22A00CC026A /* Player.swift */,
+				D083E0EF23A6E3DD00CC026A /* Monster.swift */,
 				D083E0BD23A4BD7000CC026A /* GameViewController.swift */,
 				D083E0BF23A4BD7000CC026A /* Main.storyboard */,
 				D083E0C223A4BD7D00CC026A /* Assets.xcassets */,
 				D083E0C423A4BD7D00CC026A /* LaunchScreen.storyboard */,
 				D083E0C723A4BD7D00CC026A /* Info.plist */,
+				D083E0E923A5B9F000CC026A /* monster_2.png */,
+				D083E0EA23A5B9F100CC026A /* monster_1.png */,
 			);
 			path = "Labyrinth of Mythhaven";
 			sourceTree = "<group>";
@@ -238,8 +250,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D083E0EC23A5B9F100CC026A /* monster_1.png in Resources */,
 				D083E0C123A4BD7000CC026A /* Main.storyboard in Resources */,
 				D083E0B823A4BD7000CC026A /* GameScene.sks in Resources */,
+				D083E0EB23A5B9F100CC026A /* monster_2.png in Resources */,
 				D083E0C323A4BD7D00CC026A /* Assets.xcassets in Resources */,
 				D083E0C623A4BD7D00CC026A /* LaunchScreen.storyboard in Resources */,
 				D083E0BA23A4BD7000CC026A /* Actions.sks in Resources */,
@@ -267,6 +281,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D083E0F023A6E3DD00CC026A /* Monster.swift in Sources */,
+				D083E0EE23A6D22A00CC026A /* Player.swift in Sources */,
 				D083E0BC23A4BD7000CC026A /* GameScene.swift in Sources */,
 				D083E0BE23A4BD7000CC026A /* GameViewController.swift in Sources */,
 				D083E0B623A4BD7000CC026A /* AppDelegate.swift in Sources */,
