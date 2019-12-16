@@ -35,6 +35,7 @@ class Player {
             }
         }
     }
+    var playerHpBar: ProgressBar?
     var playerPositionArray: [CGFloat] = []
     var playerPosition = PlayerPositionState.middle
     let player: SKSpriteNode
@@ -84,5 +85,54 @@ class Player {
         player.run(animatePlayer)
     }
     
+    func takeDamage(_ amount: Int) {
+        health -= amount
+        playerHpBar?.progress = CGFloat(integerLiteral: health)
+        if let progressBar = playerHpBar {
+            if progressBar.progress <= CGFloat(progressBar.total / 2) && progressBar.progress > CGFloat(progressBar.total / 4) {
+                playerHpBar?.bar?.color = .yellow
+            } else if progressBar.progress <= CGFloat(progressBar.total / 4) {
+                playerHpBar?.bar?.color = .red
+            }
+        }
+    }
     
+    func createPlayerHpBar(gameScene: GameScene) {
+        //player hp bar
+        let playerHpBackground = SKShapeNode(rectOf: CGSize(width: 180, height: 11), cornerRadius: 5)
+        playerHpBackground.setScale(4)
+        playerHpBackground.position = CGPoint(x: gameScene.size.width/2, y: gameScene.size.height * 0.40)
+        playerHpBackground.zPosition = 100
+        playerHpBackground.strokeColor = .black
+        playerHpBackground.fillColor = .black
+        gameScene.addChild(playerHpBackground)
+        
+        let playerHpContainer = SKShapeNode(rectOf: CGSize(width: 150, height: 10), cornerRadius: 5)
+        playerHpContainer.setScale(4)
+        playerHpContainer.position = CGPoint(x: gameScene.size.width/2 + 56, y:gameScene.size.height * 0.40)
+        playerHpContainer.zPosition = 102
+        playerHpContainer.strokeColor = .lightGray
+        playerHpContainer.lineWidth = 2
+        gameScene.addChild(playerHpContainer)
+        
+        let playerHpLabel = SKLabelNode(text: "HP")
+        playerHpLabel.horizontalAlignmentMode = .center
+        playerHpLabel.position = CGPoint(x: gameScene.size.width/2 - 296 , y: gameScene.size.height * 0.40 - 15)
+        playerHpLabel.fontName = "AmericanTypewriter-Bold"
+        playerHpLabel.fontColor = UIColor.orange
+        playerHpLabel.fontSize = 42
+        playerHpLabel.zPosition = 102
+        gameScene.addChild(playerHpLabel)
+        
+        playerHpBar = {
+            let progressBar = ProgressBar(color: .green, size: CGSize(width: 596, height: 34), totalProgress: CGFloat(integerLiteral: self.health))
+            progressBar.position = CGPoint(x:gameScene.size.width/2 + 56, y:gameScene.size.height * 0.40 - 17)
+            progressBar.progress = CGFloat(integerLiteral: self.health)
+            return progressBar
+        }()
+        
+        if let hpBar = playerHpBar {
+            gameScene.addChild(hpBar)
+        }
+    }
 }
