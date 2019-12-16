@@ -31,11 +31,16 @@ class GameScene: SKScene {
         monsterNode.zPosition = 2
         
         monster = Monster(monsterNode)
-        monster?.animate()
-        
+
         if let node = monster?.monster {
             self.addChild(node)
         }
+
+        animateMonster()
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        monster?.takeDamage(player?.attack() ?? 0)
     }
     
     @objc func handleSwipes(_ sender:UISwipeGestureRecognizer) {
@@ -85,5 +90,12 @@ class GameScene: SKScene {
         
         self.view?.addGestureRecognizer(swipeRight)
         self.view?.addGestureRecognizer(swipeLeft)
+    }
+    
+    func animateMonster() {
+        if let attackAction = monster?.animate(), let playerObj = player{
+            let action = attackAction.run(playerObj)
+            monster?.monster.run(action, completion: { self.animateMonster() })
+        }
     }
 }

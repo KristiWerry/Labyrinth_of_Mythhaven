@@ -11,27 +11,50 @@ import UIKit
 import SpriteKit
 
 class Monster {
-    enum MonsterAttackState {
+    enum MonsterState {
+        case attackNormal, attackUltimate, idle
         
+        mutating func attack() {
+            let rand = Int.random(in: 1...10)
+            rand < 8 ? (self = .attackNormal) : (self = .attackUltimate)
+        }
     }
     
     var monster: SKSpriteNode
+    var monsterState: MonsterState
     var textureArray = [SKTexture]()
+    var health: Int
 
     init (_ monsterNode: SKSpriteNode) {
         monster = monsterNode
-    }
-    
-    func animate() {
+        monsterState = .idle
+        
+        health = 100
+        
         textureArray.append(SKTexture(imageNamed: "monster_1.png"))
         textureArray.append(SKTexture(imageNamed: "monster_2.png"))
         textureArray.append(SKTexture(imageNamed: "monster_1.png"))
-        
-        let randWaitTime = SKAction.wait(forDuration: 3, withRange: 4)
-        
-        //let idleMonster = SKAction.wait(forDuration: 3)
-        let animateMonster = SKAction.repeat(SKAction.animate(with: textureArray, timePerFrame: 1), count: 1)
-        let monsterSequence = SKAction.sequence([randWaitTime,animateMonster])
-        monster.run(SKAction.repeatForever(monsterSequence))
+    }
+    
+    func animate() -> AttackProtocol{
+        return attack()
+    }
+    
+    func attack() -> AttackProtocol {
+        monsterState.attack()
+        switch monsterState {
+        case .attackNormal:
+            return NormalAttack(self)
+        case .attackUltimate:
+            return NormalAttack(self) // Change to ultimate when available
+        case .idle:
+            print("Default")
+        }
+        return NormalAttack(self)
+    }
+    
+    func takeDamage(_ amount: Int) {
+        health -= amount
+        print(health)
     }
 }
