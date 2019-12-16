@@ -38,10 +38,27 @@ class Player {
     var playerPositionArray: [CGFloat] = []
     var playerPosition = PlayerPositionState.middle
     let player: SKSpriteNode
+    var idleArray = [SKTexture]()
+    var attackArray = [SKTexture]()
+    var attackStat: Int
+    var health: Int
 
     init(_ playerNode: SKSpriteNode, _ playerPositions: [CGFloat]) {
         player = playerNode
         playerPositionArray = playerPositions
+        
+        attackStat = 4
+        health = 100
+        
+        idleArray.append(SKTexture(imageNamed: "player_girl.png"))
+        idleArray.append(SKTexture(imageNamed: "player_girl1.png"))
+        idleArray.append(SKTexture(imageNamed: "player_girl2.png"))
+        
+        attackArray.append(SKTexture(imageNamed: "player_girl_attack1.png"))
+        attackArray.append(SKTexture(imageNamed: "player_girl_attack2.png"))
+        attackArray.append(SKTexture(imageNamed: "player_girl1.png"))
+        
+        animate()
     }
     
     func movePlayer(direction: UISwipeGestureRecognizer.Direction) {
@@ -55,6 +72,17 @@ class Player {
         }
         let movePlayer = SKAction.moveTo(x: playerPositionArray[playerPosition.rawValue], duration: 0.1)
         player.run(movePlayer)
-        print(player.position.x)
     }
+    
+    func attack() -> Int {
+        player.run(SKAction.animate(with: attackArray, timePerFrame: 0.1))
+        return attackStat
+    }
+    
+    func animate() {
+        let animatePlayer = SKAction.repeatForever(SKAction.animate(with: idleArray, timePerFrame: 0.3))
+        player.run(animatePlayer)
+    }
+    
+    
 }
