@@ -24,11 +24,13 @@ class Monster {
     var monsterState: MonsterState
     var textureArray = [SKTexture]()
     var health: Int
+    var attackStat: Int
 
     init (_ monsterNode: SKSpriteNode) {
         monster = monsterNode
         monsterState = .idle
         
+        attackStat = 15
         health = 100
         
         textureArray.append(SKTexture(imageNamed: "monster_1.png"))

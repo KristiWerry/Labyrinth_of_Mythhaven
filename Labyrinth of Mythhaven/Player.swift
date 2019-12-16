@@ -41,12 +41,14 @@ class Player {
     var idleArray = [SKTexture]()
     var attackArray = [SKTexture]()
     var attackStat: Int
+    var health: Int
 
     init(_ playerNode: SKSpriteNode, _ playerPositions: [CGFloat]) {
         player = playerNode
         playerPositionArray = playerPositions
         
         attackStat = 4
+        health = 100
         
         idleArray.append(SKTexture(imageNamed: "player_girl.png"))
         idleArray.append(SKTexture(imageNamed: "player_girl1.png"))

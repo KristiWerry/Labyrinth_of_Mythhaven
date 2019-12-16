@@ -44,6 +44,8 @@ class NormalAttack: AttackProtocol {
         let checkPlayer = SKAction.run {
             if player.playerPosition.rawValue == self.attackPositionState.rawValue {
                 print("Player has been hit")
+                player.health -= self.monster.attackStat
+                print(String(player.health) + " player health ~~~~~~~")
             }
         }
         let animateMonster = SKAction.repeat(SKAction.animate(with: monster.textureArray, timePerFrame: 1), count: 1)
