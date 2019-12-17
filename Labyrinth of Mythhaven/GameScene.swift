@@ -12,7 +12,8 @@ import GameplayKit
 class GameScene: SKScene {
     var player: Player?
     var monster: Monster?
-    var button: Button?
+    var gameState = GameState.playGame
+    var gameManager: GameManager?
     
     enum GameState {
         case preGame, playGame, endGame, pauseGame
@@ -27,14 +28,11 @@ class GameScene: SKScene {
     }
     
     func addBlockButton() {
-        button = Button(imageNamed: "block_button_icon.png", initialAction: { self.player?.defend() }, endingAction: { self.player?.defenseFinished() })
-        button?.zPosition = 2
-        button?.setScale(0.35)
-        button?.position = CGPoint(x: self.size.width/2, y: (self.size.height/4) + 50)
-        
-        if let blockButton = button {
-            addChild(blockButton)
-        }
+        let blockButton = Button(imageNamed: "block_button_icon.png", initialAction: { self.player?.defend() }, endingAction: { self.player?.defenseFinished() })
+        blockButton.zPosition = 2
+        blockButton.setScale(0.35)
+        blockButton.position = CGPoint(x: self.size.width/2, y: (self.size.height/4) + 50)
+        addChild(blockButton)
     }
     
     func createMonster() {
@@ -54,11 +52,25 @@ class GameScene: SKScene {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        monster?.takeDamage(player?.attack() ?? 0)
+        switch gameState {
+        case .playGame:
+            if monster?.isAlive ?? true {
+                monster?.takeDamage(player?.attack() ?? 0)
+            } else {
+                gameOver()
+            }
+        default:
+            print("Non play state")
+        }
     }
     
     @objc func handleSwipes(_ sender:UISwipeGestureRecognizer) {
-        player?.movePlayer(direction: sender.direction)
+        switch gameState {
+        case .playGame:
+            player?.movePlayer(direction: sender.direction)
+        default:
+            print("Non play state")
+        }
     }
     
     func createPlayer() {
@@ -109,8 +121,78 @@ class GameScene: SKScene {
     
     func animateMonster() {
         if let attackAction = monster?.animate(), let playerObj = player{
-            let action = attackAction.run(playerObj, gameScene: self)
-            monster?.monster.run(action, completion: { self.animateMonster() })
+            if player?.isAlive ?? true {
+                let action = attackAction.run(playerObj, gameScene: self)
+                monster?.monster.run(action, completion: { self.animateMonster() })
+            } else {
+                gameOver()
+            }
         }
+    }
+    
+    func gameOver() {
+        gameState = .endGame
+        self.removeAllActions()
+        monster?.monster.removeAllActions()
+        player?.player.removeAllActions()
+        self.enumerateChildNodes(withName: "attack", using: {
+            attack, stop in
+            attack.removeAllActions()
+        })
+        
+        createGameOverModal()
+    }
+    
+    func createGameOverModal() {
+        let gameOverModalBackground = SKShapeNode(rectOf: CGSize(width: 100 , height: 150), cornerRadius: 5)
+        gameOverModalBackground.setScale(4)
+        gameOverModalBackground.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
+        gameOverModalBackground.zPosition = 101
+        gameOverModalBackground.strokeColor = .black
+        gameOverModalBackground.fillColor = .black
+        self.addChild(gameOverModalBackground)
+        
+        let gameOverModalForeground = SKShapeNode(rectOf: CGSize(width: 95, height: 145), cornerRadius: 5)
+        gameOverModalForeground.setScale(4)
+        gameOverModalForeground.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
+        gameOverModalForeground.zPosition = 102
+        gameOverModalForeground.strokeColor = .darkGray
+        gameOverModalForeground.fillColor = .darkGray
+        self.addChild(gameOverModalForeground)
+        
+        let gameOverModalLabel = SKLabelNode(text: "GAME OVER!")
+        gameOverModalLabel.horizontalAlignmentMode = .center
+        gameOverModalLabel.position = CGPoint(x: self.size.width/2 , y: self.size.height/2 + 225)
+        gameOverModalLabel.fontName = "AmericanTypewriter-Bold"
+        gameOverModalLabel.fontColor = UIColor.red
+        gameOverModalLabel.fontSize = 50
+        gameOverModalLabel.zPosition = 102
+        self.addChild(gameOverModalLabel)
+        
+        let restartButton = Button(imageNamed: "restart_button_icon.png", initialAction: { self.restartGame() }, endingAction: {})
+        restartButton.zPosition = 103
+        restartButton.setScale(0.25)
+        restartButton.position = CGPoint(x: self.size.width/2, y: (self.size.height/2) + 125)
+        self.addChild(restartButton)
+        
+        let quitButton = Button(imageNamed: "quit_button.png", initialAction: { self.goToMainMenu() }, endingAction: {})
+        quitButton.zPosition = 103
+        quitButton.setScale(0.30)
+        quitButton.position = CGPoint(x: self.size.width/2, y: (self.size.height/2))
+        self.addChild(quitButton)
+    }
+    
+    func restartGame() {
+        self.removeAllChildren()
+        createBackground()
+        createPlayer()
+        createMonster()
+        createSwipeGestureRecognizer()
+        addBlockButton()
+        gameState = .playGame
+    }
+    
+    func goToMainMenu() {
+        print("Return to main menu")
     }
 }

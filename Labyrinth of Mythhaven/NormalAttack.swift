@@ -51,6 +51,7 @@ class NormalAttack: AttackProtocol {
         let animateMonster = SKAction.repeat(SKAction.animate(with: monster.textureArray, timePerFrame: 1), count: 1)
         
         let snowball = SKSpriteNode(texture: monster.normalAttackTextureArray[0])
+        snowball.name = "attack"
         snowball.setScale(2)
         let xPos = player.playerPositionArray[attackPositionState.rawValue]
         let startPoint = CGPoint(x: xPos, y: gameScene.size.height * 1.2)
