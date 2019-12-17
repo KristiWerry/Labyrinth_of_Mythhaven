@@ -24,6 +24,7 @@ class Monster {
     var monsterState: MonsterState
     var monsterHpBar: ProgressBar?
     var textureArray = [SKTexture]()
+    var normalAttackTextureArray = [SKTexture]()
     var health: Int
     var attackStat: Int
 
@@ -31,12 +32,14 @@ class Monster {
         monster = monsterNode
         monsterState = .idle
         
-        attackStat = 15
+        attackStat = 20
         health = 100
         
         textureArray.append(SKTexture(imageNamed: "monster_1.png"))
         textureArray.append(SKTexture(imageNamed: "monster_2.png"))
         textureArray.append(SKTexture(imageNamed: "monster_1.png"))
+        
+        normalAttackTextureArray.append(SKTexture(imageNamed: "snowball"))
     }
     
     func animate() -> AttackProtocol{

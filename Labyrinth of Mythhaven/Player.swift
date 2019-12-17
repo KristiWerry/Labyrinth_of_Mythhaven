@@ -42,6 +42,7 @@ class Player {
     var idleArray = [SKTexture]()
     var attackArray = [SKTexture]()
     var attackStat: Int
+    var defenseStat: Int
     var health: Int
 
     init(_ playerNode: SKSpriteNode, _ playerPositions: [CGFloat]) {
@@ -49,6 +50,7 @@ class Player {
         playerPositionArray = playerPositions
         
         attackStat = 4
+        defenseStat = 3
         health = 100
         
         idleArray.append(SKTexture(imageNamed: "player_girl.png"))
@@ -58,10 +60,10 @@ class Player {
         attackArray.append(SKTexture(imageNamed: "player_girl_attack1.png"))
         attackArray.append(SKTexture(imageNamed: "player_girl_attack2.png"))
         attackArray.append(SKTexture(imageNamed: "player_girl1.png"))
-        
+
         animate()
     }
-    
+        
     func movePlayer(direction: UISwipeGestureRecognizer.Direction) {
         switch direction {
         case .left:
@@ -85,8 +87,25 @@ class Player {
         player.run(animatePlayer)
     }
     
+    @objc func lowAlpha() {
+        self.player.alpha = 0.5
+    }
+    
+    @objc func highAlpha() {
+        self.player.alpha = 1.0
+    }
+    
     func takeDamage(_ amount: Int) {
-        health -= amount
+        let damage = amount - defenseStat
+        if damage > 0 {
+            health -= damage
+            let fadeOutAction = SKAction.fadeAlpha(to: 0.5, duration: 0.1)
+            let fadeInAction = SKAction.fadeIn(withDuration: 0.1)
+            let damageSequence = SKAction.sequence([fadeOutAction, fadeInAction])
+            let flickerAction = SKAction.repeat(damageSequence, count: 2)
+            player.run(flickerAction)
+        }
+        health -= damage > 0 ? damage : 0
         playerHpBar?.progress = CGFloat(integerLiteral: health)
         if let progressBar = playerHpBar {
             if progressBar.progress <= CGFloat(progressBar.total / 2) && progressBar.progress > CGFloat(progressBar.total / 4) {
@@ -134,5 +153,15 @@ class Player {
         if let hpBar = playerHpBar {
             gameScene.addChild(hpBar)
         }
+    }
+    
+    func defend() {
+        defenseStat += 5
+        print("Player Defense Boosted: \(defenseStat)")
+    }
+    
+    func defenseFinished() {
+        defenseStat -= 5
+        print("Player Defense Boost Ended: \(defenseStat)")
     }
 }
