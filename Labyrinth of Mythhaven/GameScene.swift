@@ -12,6 +12,8 @@ import GameplayKit
 class GameScene: SKScene {
     var player: Player?
     var monster: Monster?
+    var button: Button?
+    
     enum GameState {
         case preGame, playGame, endGame, pauseGame
     }
@@ -21,6 +23,18 @@ class GameScene: SKScene {
         createPlayer()
         createMonster()
         createSwipeGestureRecognizer()
+        addBlockButton()
+    }
+    
+    func addBlockButton() {
+        button = Button(imageNamed: "block_button_icon.png", initialAction: { self.player?.defend() }, endingAction: { self.player?.defenseFinished() })
+        button?.zPosition = 2
+        button?.setScale(0.35)
+        button?.position = CGPoint(x: self.size.width/2, y: (self.size.height/4) + 50)
+        
+        if let blockButton = button {
+            addChild(blockButton)
+        }
     }
     
     func createMonster() {
@@ -53,7 +67,7 @@ class GameScene: SKScene {
         let playerNode = SKSpriteNode(imageNamed: "player_girl")
         playerNode.setScale(1)
         playerNode.position = CGPoint(x: playerPositionArray[1], y: self.size.height/2 + playerNode.size.height/2)
-        playerNode.zPosition = 3
+        playerNode.zPosition = 4
         
         player = Player(playerNode, playerPositionArray)
         player?.createPlayerHpBar(gameScene: self)
@@ -95,7 +109,7 @@ class GameScene: SKScene {
     
     func animateMonster() {
         if let attackAction = monster?.animate(), let playerObj = player{
-            let action = attackAction.run(playerObj)
+            let action = attackAction.run(playerObj, gameScene: self)
             monster?.monster.run(action, completion: { self.animateMonster() })
         }
     }

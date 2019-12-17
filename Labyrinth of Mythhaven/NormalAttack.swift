@@ -39,7 +39,7 @@ class NormalAttack: AttackProtocol {
         attackPositionState.attack()
     }
     
-    func run(_ player: Player) -> SKAction {
+    func run(_ player: Player, gameScene: GameScene) -> SKAction {
         let randWaitTime = SKAction.wait(forDuration: 3, withRange: 4)
         let checkPlayer = SKAction.run {
             if player.playerPosition.rawValue == self.attackPositionState.rawValue {
@@ -47,8 +47,28 @@ class NormalAttack: AttackProtocol {
                 player.takeDamage(self.monster.attackStat)
             }
         }
+        
         let animateMonster = SKAction.repeat(SKAction.animate(with: monster.textureArray, timePerFrame: 1), count: 1)
-        let monsterSequence = SKAction.sequence([randWaitTime, animateMonster, checkPlayer])
+        
+        let snowball = SKSpriteNode(texture: monster.normalAttackTextureArray[0])
+        snowball.setScale(2)
+        let xPos = player.playerPositionArray[attackPositionState.rawValue]
+        let startPoint = CGPoint(x: xPos, y: gameScene.size.height * 1.2)
+        let endpoint = gameScene.size.height/2
+        snowball.position = startPoint
+        snowball.zPosition = 3
+        gameScene.addChild(snowball)
+        
+        let moveSnowBall = SKAction.moveTo(y: endpoint, duration: 1.5)
+        let deleteSnowball = SKAction.removeFromParent()
+        let snowballSequence = SKAction.sequence([moveSnowBall, checkPlayer, deleteSnowball])
+        let runSnowballAction = SKAction.run {
+            snowball.run(snowballSequence)
+        }
+        
+        let monsterSequence = SKAction.sequence([randWaitTime, animateMonster, runSnowballAction])
         return monsterSequence
     }
+    
+    
 }
