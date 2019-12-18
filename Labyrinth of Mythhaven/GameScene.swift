@@ -14,6 +14,7 @@ class GameScene: SKScene {
     var monster: Monster?
     var gameState = GameState.playGame
     var gameManager: GameManager?
+    var sceneContext: SceneContext?
     
     enum GameState {
         case preGame, playGame, endGame, pauseGame
@@ -46,7 +47,7 @@ class GameScene: SKScene {
         monsterNode.position = CGPoint(x:self.size.width/2, y: self.size.height/2 + monsterNode.size.height/2)
         monsterNode.zPosition = 2
         
-        monster = Monster(monsterNode)
+        monster = Monster(monsterNode, sceneContext?.currentLevel ?? 1)
         monster?.createMonsterHpBar(gameScene: self)
         
         if let node = monster?.monster {
@@ -63,7 +64,7 @@ class GameScene: SKScene {
             // Animates the players attack and deals damage to the monster
             monster?.takeDamage(player?.attack() ?? 0)
             guard monster?.isAlive == true else {
-                gameOver() // If the monster is not alive then the game is over
+                nextPath() // If the monster is not alive then the game is over
                 return
             }
         default:
@@ -83,14 +84,27 @@ class GameScene: SKScene {
     
     func createPlayer() {
         let playerPositionArray: [CGFloat] = [self.size.width/3, self.size.width / 2, self.size.width * 2/3] // The player can exist in one of the three positions provided by this array
-        
+        let playerNode: SKSpriteNode
         // Build the player sprite
-        let playerNode = SKSpriteNode(imageNamed: "player_girl")
+        if let gender = sceneContext?.gender {
+            if gender.elementsEqual("Female") {
+                playerNode = SKSpriteNode(imageNamed: "player_girl")
+            }
+            else {
+                playerNode = SKSpriteNode(imageNamed: "player_boy")
+            }
+        } else {
+            playerNode = SKSpriteNode(imageNamed: "player_girl")
+        }
+         
         playerNode.setScale(1)
         playerNode.position = CGPoint(x: playerPositionArray[1], y: self.size.height/2 + playerNode.size.height/2)
         playerNode.zPosition = 4
         
-        player = Player(playerNode, playerPositionArray)
+        player = Player(playerNode, playerPositionArray, gender: sceneContext?.gender ?? "Female")
+        player?.attackStat = sceneContext?.attack ?? 4
+        player?.health = sceneContext?.hp ?? 100
+        player?.defenseStat = sceneContext?.defense ?? 3
         player?.createPlayerHpBar(gameScene: self)
         
         if let node = player?.player {
@@ -143,7 +157,7 @@ class GameScene: SKScene {
         }
     }
     
-    func gameOver() {
+    func nextPath() {
         gameState = .endGame
         
         // Remove all actions, this shouold freeze the animations
@@ -155,6 +169,21 @@ class GameScene: SKScene {
             attack.removeAllActions()
         })
         
+        createNextPathModal()
+    }
+    
+    func gameOver() {
+        gameState = .endGame
+        
+        // Remove all actions, this shouold freeze the animations
+        self.removeAllActions()
+        monster?.monster.removeAllActions()
+        player?.player.removeAllActions()
+        self.enumerateChildNodes(withName: "attack", using: {
+            attack, stop in
+            attack.removeAllActions()
+        })
+        sceneContext?.currentLevel  = 1
         createGameOverModal()
     }
     
@@ -190,7 +219,7 @@ class GameScene: SKScene {
         // Adds a button that is tied to the restart function that will restart the game
         let restartButton = Button(imageNamed: "restart_button_icon.png", initialAction: { self.restartGame() }, endingAction: {})
         restartButton.zPosition = 103
-        restartButton.setScale(0.25)
+        restartButton.setScale(0.30)
         restartButton.position = CGPoint(x: self.size.width/2, y: (self.size.height/2) + 125)
         self.addChild(restartButton)
         
@@ -215,5 +244,132 @@ class GameScene: SKScene {
     // Game Manager should be a ViewController, which should remove this scene from the view
     func goToMainMenu() {
         gameManager?.quitGame()
+    }
+    
+    func setContext(_ context: SceneContext) {
+        self.sceneContext = context
+    }
+    
+    func createNextPathModal() {
+        // Creates the background for the modal
+        let nextPathModalBackground = SKShapeNode(rectOf: CGSize(width: 100 , height: 150), cornerRadius: 5)
+        nextPathModalBackground.setScale(4)
+        nextPathModalBackground.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
+        nextPathModalBackground.zPosition = 101
+        nextPathModalBackground.strokeColor = .black
+        nextPathModalBackground.fillColor = .black
+        self.addChild(nextPathModalBackground)
+        
+        // Creates a foreground that lies on the background for the modal
+        let nextPathModalForeground = SKShapeNode(rectOf: CGSize(width: 95, height: 145), cornerRadius: 5)
+        nextPathModalForeground.setScale(4)
+        nextPathModalForeground.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
+        nextPathModalForeground.zPosition = 102
+        nextPathModalForeground.strokeColor = .darkGray
+        nextPathModalForeground.fillColor = .darkGray
+        self.addChild(nextPathModalForeground)
+        
+        // Creates the game over text for this modal
+        let nextPathModalLabel = SKLabelNode(text: "Choose a path!")
+        nextPathModalLabel.horizontalAlignmentMode = .center
+        nextPathModalLabel.position = CGPoint(x: self.size.width/2 , y: self.size.height/2 + 225)
+        nextPathModalLabel.fontName = "AmericanTypewriter-Bold"
+        nextPathModalLabel.fontColor = UIColor.blue
+        nextPathModalLabel.fontSize = 45
+        nextPathModalLabel.zPosition = 102
+        self.addChild(nextPathModalLabel)
+        
+        // Adds a button that is tied to the next level function that will restart the game with a new level
+        let leftButton = Button(imageNamed: "left_button.png", initialAction: { self.nextLevel() }, endingAction: {})
+        leftButton.zPosition = 103
+        leftButton.setScale(0.30)
+        leftButton.position = CGPoint(x: self.size.width/2, y: (self.size.height/2) + 125)
+        self.addChild(leftButton)
+        
+        // Adds a button that is tied to the next level function that will restart the game with a new level
+        let rightButton = Button(imageNamed: "right_button.png", initialAction: { self.nextLevel() }, endingAction: {})
+        rightButton.zPosition = 103
+        rightButton.setScale(0.30)
+        rightButton.position = CGPoint(x: self.size.width/2, y: (self.size.height/2))
+        self.addChild(rightButton)
+    }
+    
+    func nextLevel() {
+        if let currentLevel = sceneContext?.currentLevel, let finalLevel = sceneContext?.finalLevel {
+            sceneContext?.currentLevel = currentLevel + 1
+            
+            if currentLevel == finalLevel {
+                print("You WIN!")
+                sceneContext?.finalLevel = Int.random(in: 4...10)
+                victory()
+            }
+            
+            player?.levelUp()
+            sceneContext?.attack = player?.attackStat
+            sceneContext?.defense = player?.defenseStat
+            sceneContext?.hp = player?.health
+            restartGame()
+        }
+    }
+    
+    func createVictoryModal() {
+        // Creates the background for the modal
+        let nextPathModalBackground = SKShapeNode(rectOf: CGSize(width: 100 , height: 150), cornerRadius: 5)
+        nextPathModalBackground.setScale(4)
+        nextPathModalBackground.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
+        nextPathModalBackground.zPosition = 101
+        nextPathModalBackground.strokeColor = .black
+        nextPathModalBackground.fillColor = .black
+        self.addChild(nextPathModalBackground)
+        
+        // Creates a foreground that lies on the background for the modal
+        let nextPathModalForeground = SKShapeNode(rectOf: CGSize(width: 95, height: 145), cornerRadius: 5)
+        nextPathModalForeground.setScale(4)
+        nextPathModalForeground.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
+        nextPathModalForeground.zPosition = 102
+        nextPathModalForeground.strokeColor = .darkGray
+        nextPathModalForeground.fillColor = .darkGray
+        self.addChild(nextPathModalForeground)
+        
+        // Creates the game over text for this modal
+        let nextPathModalLabel = SKLabelNode(text: "Congrats!")
+        nextPathModalLabel.horizontalAlignmentMode = .center
+        nextPathModalLabel.position = CGPoint(x: self.size.width/2 , y: self.size.height/2 + 225)
+        nextPathModalLabel.fontName = "AmericanTypewriter-Bold"
+        nextPathModalLabel.fontColor = UIColor.blue
+        nextPathModalLabel.fontSize = 45
+        nextPathModalLabel.zPosition = 102
+        self.addChild(nextPathModalLabel)
+        
+        let nextPathModalLabel2 = SKLabelNode(text: "You made it!")
+        nextPathModalLabel2.horizontalAlignmentMode = .center
+        nextPathModalLabel2.position = CGPoint(x: self.size.width/2 , y: self.size.height/2 + 190)
+        nextPathModalLabel2.fontName = "AmericanTypewriter-Bold"
+        nextPathModalLabel2.fontColor = UIColor.blue
+        nextPathModalLabel2.fontSize = 35
+        nextPathModalLabel2.zPosition = 102
+        self.addChild(nextPathModalLabel2)
+        
+        // Adds a button that is tied to the next level function that will restart the game with a new level
+        let leftButton = Button(imageNamed: "continue_button.png", initialAction: { self.goToMainMenu() }, endingAction: {})
+        leftButton.zPosition = 103
+        leftButton.setScale(0.30)
+        leftButton.position = CGPoint(x: self.size.width/2, y: (self.size.height/2) + 125)
+        self.addChild(leftButton)
+    }
+    
+    func victory() {
+        gameState = .endGame
+        
+        // Remove all actions, this shouold freeze the animations
+        self.removeAllActions()
+        monster?.monster.removeAllActions()
+        player?.player.removeAllActions()
+        self.enumerateChildNodes(withName: "attack", using: {
+            attack, stop in
+            attack.removeAllActions()
+        })
+        
+        createVictoryModal()
     }
 }

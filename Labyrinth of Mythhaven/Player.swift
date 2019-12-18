@@ -50,7 +50,7 @@ class Player {
     var health: Int
     var isAlive: Bool
 
-    init(_ playerNode: SKSpriteNode, _ playerPositions: [CGFloat]) {
+    init(_ playerNode: SKSpriteNode, _ playerPositions: [CGFloat], gender: String) {
         player = playerNode
         playerPositionArray = playerPositions
         
@@ -59,16 +59,26 @@ class Player {
         health = 100
         isAlive = true
         
-        idleArray.append(SKTexture(imageNamed: "player_girl.png"))
-        idleArray.append(SKTexture(imageNamed: "player_girl1.png"))
-        idleArray.append(SKTexture(imageNamed: "player_girl2.png"))
-        
-        attackArray.append(SKTexture(imageNamed: "player_girl_attack1.png"))
-        attackArray.append(SKTexture(imageNamed: "player_girl_attack2.png"))
-        attackArray.append(SKTexture(imageNamed: "player_girl1.png"))
+        // Set the player animations depending om the gender
+        if gender.elementsEqual("Female") {
+            createAnimationTextures("girl")
+        } else {
+            createAnimationTextures("boy")
+        }
 
         // Begins animating the characters idle animations
         animate()
+    }
+    
+    func createAnimationTextures(_ gender: String) {
+        // Uses string interpolation to decide which files to use for player animation
+        idleArray.append(SKTexture(imageNamed: "player_\(gender).png"))
+        idleArray.append(SKTexture(imageNamed: "player_\(gender)1.png"))
+        idleArray.append(SKTexture(imageNamed: "player_\(gender)2.png"))
+        
+        attackArray.append(SKTexture(imageNamed: "player_\(gender)_attack1.png"))
+        attackArray.append(SKTexture(imageNamed: "player_\(gender)_attack2.png"))
+        attackArray.append(SKTexture(imageNamed: "player_\(gender)1.png"))
     }
     
     // Based on the provided direction, attempt to move left or right
@@ -160,6 +170,15 @@ class Player {
         playerHpLabel.zPosition = 102
         gameScene.addChild(playerHpLabel)
         
+        let playerNameLabel = SKLabelNode(text: gameScene.sceneContext?.name)
+        playerNameLabel.horizontalAlignmentMode = .left
+        playerNameLabel.position = CGPoint(x: gameScene.size.width/2 - 350 , y: gameScene.size.height * 0.40 + 50)
+        playerNameLabel.fontName = "AmericanTypewriter-Bold"
+        playerNameLabel.fontColor = UIColor.orange
+        playerNameLabel.fontSize = 56
+        playerNameLabel.zPosition = 100
+        gameScene.addChild(playerNameLabel)
+        
         // The actual progress bar is just the green part of the hp bar, the rest is just styling
         playerHpBar = {
             let progressBar = ProgressBar(color: .green, size: CGSize(width: 596, height: 34), totalProgress: CGFloat(integerLiteral: self.health))
@@ -175,13 +194,19 @@ class Player {
     
     // This is tied to the block button, increases the users defense, which decreases the amount of damage dealt if theuy were to be hit by a monster attack
     func defend() {
-        defenseStat += 5
-        print("Player Defense Boosted: \(defenseStat)")
+        defenseStat += 10
     }
     
     // When the user releases the block button this function will get called and reset the users defense to its original amount
     func defenseFinished() {
-        defenseStat -= 5
-        print("Player Defense Boost Ended: \(defenseStat)")
+        defenseStat -= 10
+    }
+    
+    func levelUp() {
+        attackStat += 5
+        defenseStat += 5
+        health += 50
+        
+        print("Attack: \(attackStat) , Defense: \(defenseStat) , Health: \(health)")
     }
 }

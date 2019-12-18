@@ -19,12 +19,15 @@ class GameViewController: UIViewController, GameManager {
         super.viewDidLoad()
         pauseModal.layer.cornerRadius = 5
         pauseModalForeground.layer.cornerRadius = 5
-        
+                
         if let view = self.view as! SKView? {
+            let sceneContext = SceneContext(defaults: UserDefaults.standard)
+            
             //Scale the scene so it fits on all devices
             scene = GameScene(size: CGSize(width:1536, height: 2048))
             // Set the scale mode to scale to fit the window
             scene?.scaleMode = .aspectFill
+            scene?.setContext(sceneContext)
             scene?.gameManager = self
                 
             // Present the scene
@@ -51,6 +54,10 @@ class GameViewController: UIViewController, GameManager {
     
     // This is implemented as part of the GameManager protocol, it allows the scene to tell the controller that the scene is finished
     func quitGame() {
+        scene?.removeAllActions()
+        scene?.removeAllChildren()
+        scene?.removeFromParent()
+        scene = nil
         self.performSegue(withIdentifier: "ReturnToMainMenu", sender: self)
     }
     
