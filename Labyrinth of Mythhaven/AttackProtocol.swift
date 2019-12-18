@@ -11,5 +11,5 @@ import SpriteKit
 
 protocol AttackProtocol {
     var monster: Monster { get set }
-    func run(_ player: Player) -> SKAction
+    func run(_ player: Player, gameScene: GameScene) -> SKAction
 }

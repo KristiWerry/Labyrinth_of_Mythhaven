@@ -12,17 +12,29 @@ import GameplayKit
 class GameScene: SKScene {
     var player: Player?
     var monster: Monster?
+    var button: Button?
+    
     enum GameState {
         case preGame, playGame, endGame, pauseGame
     }
-    var monsterHpBar: ProgressBar?
-    var playerHpBar: ProgressBar?
     
     override func didMove(to view: SKView) {
         createBackground()
         createPlayer()
         createMonster()
         createSwipeGestureRecognizer()
+        addBlockButton()
+    }
+    
+    func addBlockButton() {
+        button = Button(imageNamed: "block_button_icon.png", initialAction: { self.player?.defend() }, endingAction: { self.player?.defenseFinished() })
+        button?.zPosition = 2
+        button?.setScale(0.35)
+        button?.position = CGPoint(x: self.size.width/2, y: (self.size.height/4) + 50)
+        
+        if let blockButton = button {
+            addChild(blockButton)
+        }
     }
     
     func createMonster() {
@@ -32,26 +44,17 @@ class GameScene: SKScene {
         monsterNode.zPosition = 2
         
         monster = Monster(monsterNode)
-
+        monster?.createMonsterHpBar(gameScene: self)
+        
         if let node = monster?.monster {
             self.addChild(node)
         }
         
-        createMonsterHpBar()
         animateMonster()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         monster?.takeDamage(player?.attack() ?? 0)
-        
-        monsterHpBar?.progress = CGFloat(integerLiteral: monster!.health)
-        if let progressBar = monsterHpBar {
-            if progressBar.progress <= CGFloat(progressBar.total / 2) && progressBar.progress > CGFloat(progressBar.total / 4) {
-                monsterHpBar?.bar?.color = .yellow
-            } else if progressBar.progress <= CGFloat(progressBar.total / 4) {
-                monsterHpBar?.bar?.color = .red
-            }
-        }
     }
     
     @objc func handleSwipes(_ sender:UISwipeGestureRecognizer) {
@@ -59,19 +62,19 @@ class GameScene: SKScene {
     }
     
     func createPlayer() {
-        let playerPositionArray: [CGFloat] = [self.size.width/3, self.size.width / 2, self.size.width * 2/3]
+        let playerPositionArray: [CGFloat] = [self.size.width/3, self.size.width / 2, self.size.width * 2/3] // The player can exist in one of the three positions provided by this array
         
         let playerNode = SKSpriteNode(imageNamed: "player_girl")
         playerNode.setScale(1)
         playerNode.position = CGPoint(x: playerPositionArray[1], y: self.size.height/2 + playerNode.size.height/2)
-        playerNode.zPosition = 3
+        playerNode.zPosition = 4
         
         player = Player(playerNode, playerPositionArray)
+        player?.createPlayerHpBar(gameScene: self)
         
         if let node = player?.player {
             self.addChild(node)
         }
-        createPlayerHpBar()
     }
     
     func createBackground() {
@@ -106,89 +109,8 @@ class GameScene: SKScene {
     
     func animateMonster() {
         if let attackAction = monster?.animate(), let playerObj = player{
-            let action = attackAction.run(playerObj)
+            let action = attackAction.run(playerObj, gameScene: self)
             monster?.monster.run(action, completion: { self.animateMonster() })
         }
     }
-    
-    func createMonsterHpBar() {
-        //monster hp bar
-        let monsterHpBackground = SKShapeNode(rectOf: CGSize(width: 180, height: 11), cornerRadius: 5)
-        monsterHpBackground.setScale(4)
-        monsterHpBackground.position = CGPoint(x: self.size.width/2, y: self.size.height * 0.85)
-        monsterHpBackground.zPosition = 100
-        monsterHpBackground.strokeColor = .black
-        monsterHpBackground.fillColor = .black
-        self.addChild(monsterHpBackground)
-        
-        let monsterHpContainer = SKShapeNode(rectOf: CGSize(width: 150, height: 10), cornerRadius: 5)
-        monsterHpContainer.setScale(4)
-        monsterHpContainer.position = CGPoint(x: self.size.width/2 + 56, y:self.size.height * 0.85)
-        monsterHpContainer.zPosition = 102
-        monsterHpContainer.strokeColor = .lightGray
-        monsterHpContainer.lineWidth = 2
-        self.addChild(monsterHpContainer)
-        
-        let monsterHpLabel = SKLabelNode(text: "HP")
-        monsterHpLabel.horizontalAlignmentMode = .center
-        monsterHpLabel.position = CGPoint(x: self.size.width/2 - 296 , y: self.size.height * 0.85 - 15)
-        monsterHpLabel.fontName = "AmericanTypewriter-Bold"
-        monsterHpLabel.fontColor = UIColor.orange
-        monsterHpLabel.fontSize = 42
-        monsterHpLabel.zPosition = 102
-        self.addChild(monsterHpLabel)
-        
-        monsterHpBar = {
-            let progressBar = ProgressBar(color: .green, size: CGSize(width: 596, height: 34), totalProgress: CGFloat(integerLiteral: monster!.health))
-            progressBar.position = CGPoint(x:self.size.width/2 + 56, y:self.size.height * 0.85 - 17)
-            progressBar.progress = CGFloat(integerLiteral: monster!.health)
-            return progressBar
-        }()
-        
-        if let hpBar = monsterHpBar {
-            self.addChild(hpBar)
-        }
-    }
-    
-    func createPlayerHpBar() {
-        //player hp bar
-        let playerHpBackground = SKShapeNode(rectOf: CGSize(width: 180, height: 11), cornerRadius: 5)
-        playerHpBackground.setScale(4)
-        playerHpBackground.position = CGPoint(x: self.size.width/2, y: self.size.height * 0.40)
-        playerHpBackground.zPosition = 100
-        playerHpBackground.strokeColor = .black
-        playerHpBackground.fillColor = .black
-        self.addChild(playerHpBackground)
-        
-        let playerHpContainer = SKShapeNode(rectOf: CGSize(width: 150, height: 10), cornerRadius: 5)
-        playerHpContainer.setScale(4)
-        playerHpContainer.position = CGPoint(x: self.size.width/2 + 56, y:self.size.height * 0.40)
-        playerHpContainer.zPosition = 102
-        playerHpContainer.strokeColor = .lightGray
-        playerHpContainer.lineWidth = 2
-        self.addChild(playerHpContainer)
-        
-        let playerHpLabel = SKLabelNode(text: "HP")
-        playerHpLabel.horizontalAlignmentMode = .center
-        playerHpLabel.position = CGPoint(x: self.size.width/2 - 296 , y: self.size.height * 0.85 - 15)
-        playerHpLabel.fontName = "AmericanTypewriter-Bold"
-        playerHpLabel.fontColor = UIColor.orange
-        playerHpLabel.fontSize = 42
-        playerHpLabel.zPosition = 102
-        self.addChild(playerHpLabel)
-        
-        playerHpBar = {
-            let progressBar = ProgressBar(color: .green, size: CGSize(width: 596, height: 34), totalProgress: CGFloat(integerLiteral: player!.health))
-            progressBar.position = CGPoint(x:self.size.width/2 + 56, y:self.size.height * 0.40 - 17)
-            progressBar.progress = CGFloat(integerLiteral: player!.health)
-            return progressBar
-        }()
-        
-        if let hpBar = playerHpBar {
-            self.addChild(hpBar)
-        }
-    }
-    
-    
-    
 }
