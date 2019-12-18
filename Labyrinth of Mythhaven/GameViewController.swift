@@ -21,8 +21,6 @@ class GameViewController: UIViewController, GameManager {
         pauseModalForeground.layer.cornerRadius = 5
         
         if let view = self.view as! SKView? {
-            // Load the SKScene from 'GameScene.sks'
-            //if let scene = SKScene(fileNamed: "GameScene") {
             //Scale the scene so it fits on all devices
             scene = GameScene(size: CGSize(width:1536, height: 2048))
             // Set the scale mode to scale to fit the window
@@ -31,8 +29,6 @@ class GameViewController: UIViewController, GameManager {
                 
             // Present the scene
             view.presentScene(scene)
-            //}
-            
             view.ignoresSiblingOrder = true
         }
     }
@@ -53,19 +49,19 @@ class GameViewController: UIViewController, GameManager {
         return true
     }
     
+    // This is implemented as part of the GameManager protocol, it allows the scene to tell the controller that the scene is finished
     func quitGame() {
         self.performSegue(withIdentifier: "ReturnToMainMenu", sender: self)
     }
     
+    // Pauses the entire scene and all of its actions
     @IBAction func pauseGame(_ sender: Any) {
         scene?.isPaused = !(scene?.isPaused)!
         pauseModal.isHidden = !pauseModal.isHidden
     }
+    
     @IBAction func resumeGame(_ sender: Any) {
         scene?.isPaused = !(scene?.isPaused)!
         pauseModal.isHidden = !pauseModal.isHidden
-    }
-    @IBAction func quitGame(_ sender: Any) {
-        print("Quit Game")
     }
 }

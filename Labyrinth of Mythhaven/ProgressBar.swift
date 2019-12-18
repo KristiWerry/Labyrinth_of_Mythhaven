@@ -9,6 +9,7 @@
 import Foundation
 import SpriteKit
 
+// This class is used to create the HP bars
 class ProgressBar:SKNode {
     var bar:SKSpriteNode?
     var _progress:CGFloat = 0
@@ -20,6 +21,7 @@ class ProgressBar:SKNode {
         set {
             let value = newValue
             if let bar = bar {
+                // This will keep the progress bar in terms of 100% and not the raw input value
                 bar.xScale = 1 - (total - value) / total
                 _progress = value
             }

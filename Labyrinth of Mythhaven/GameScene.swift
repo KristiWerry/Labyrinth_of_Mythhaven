@@ -27,7 +27,10 @@ class GameScene: SKScene {
         addBlockButton()
     }
     
+    // Button allows the user to "block" an enemy attack
     func addBlockButton() {
+        // Initial action gets called when the button is initially pressed
+        // endingAction gets called when the button is released
         let blockButton = Button(imageNamed: "block_button_icon.png", initialAction: { self.player?.defend() }, endingAction: { self.player?.defenseFinished() })
         blockButton.zPosition = 2
         blockButton.setScale(0.35)
@@ -35,7 +38,9 @@ class GameScene: SKScene {
         addChild(blockButton)
     }
     
+    // Creates the enemy monster
     func createMonster() {
+        // Build the monster sprite
         let monsterNode = SKSpriteNode(imageNamed: "monster_1.png")
         monsterNode.setScale(2)
         monsterNode.position = CGPoint(x:self.size.width/2, y: self.size.height/2 + monsterNode.size.height/2)
@@ -48,22 +53,25 @@ class GameScene: SKScene {
             self.addChild(node)
         }
         
+        // This begins the monster attack loop
         animateMonster()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         switch gameState {
         case .playGame:
-            if monster?.isAlive ?? true {
-                monster?.takeDamage(player?.attack() ?? 0)
-            } else {
-                gameOver()
+            // Animates the players attack and deals damage to the monster
+            monster?.takeDamage(player?.attack() ?? 0)
+            guard monster?.isAlive == true else {
+                gameOver() // If the monster is not alive then the game is over
+                return
             }
         default:
             print("Non play state")
         }
     }
     
+    // Handles player left / right movement
     @objc func handleSwipes(_ sender:UISwipeGestureRecognizer) {
         switch gameState {
         case .playGame:
@@ -76,6 +84,7 @@ class GameScene: SKScene {
     func createPlayer() {
         let playerPositionArray: [CGFloat] = [self.size.width/3, self.size.width / 2, self.size.width * 2/3] // The player can exist in one of the three positions provided by this array
         
+        // Build the player sprite
         let playerNode = SKSpriteNode(imageNamed: "player_girl")
         playerNode.setScale(1)
         playerNode.position = CGPoint(x: playerPositionArray[1], y: self.size.height/2 + playerNode.size.height/2)
@@ -107,31 +116,37 @@ class GameScene: SKScene {
         self.addChild(background1)
     }
     
+    // Sets up the swipe gesture recognizers to recognize users swipe directions and bind them to the handleSwipes function
     func createSwipeGestureRecognizer() {
         let swipeRight = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
         
         let swipeLeft = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipes(_:)))
         
-        swipeLeft.direction = .left
-        swipeRight.direction = .right
+        swipeLeft.direction = .left // This handles swipes to the left
+        swipeRight.direction = .right // This handles swipes to the right
         
         self.view?.addGestureRecognizer(swipeRight)
         self.view?.addGestureRecognizer(swipeLeft)
     }
     
+    // Begins the monster attack animation
     func animateMonster() {
-        if let attackAction = monster?.animate(), let playerObj = player{
-            if player?.isAlive ?? true {
-                let action = attackAction.run(playerObj, gameScene: self)
-                monster?.monster.run(action, completion: { self.animateMonster() })
-            } else {
-                gameOver()
+        // Monsters attack function returns an attack object, this object holds the monster attack animation loop and deals damage to the player if the player is hit
+        if let attackAction = monster?.attack(), let playerObj = player {
+            let action = attackAction.run(playerObj, gameScene: self) // Needs the game scene for animation positions / sizing
+            monster?.monster.run(action, completion: { self.animateMonster() })
+            
+            guard playerObj.isAlive == true else {
+                gameOver() // If the player is not alive then the game is over
+                return
             }
         }
     }
     
     func gameOver() {
         gameState = .endGame
+        
+        // Remove all actions, this shouold freeze the animations
         self.removeAllActions()
         monster?.monster.removeAllActions()
         player?.player.removeAllActions()
@@ -144,6 +159,7 @@ class GameScene: SKScene {
     }
     
     func createGameOverModal() {
+        // Creates the background for the modal
         let gameOverModalBackground = SKShapeNode(rectOf: CGSize(width: 100 , height: 150), cornerRadius: 5)
         gameOverModalBackground.setScale(4)
         gameOverModalBackground.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
@@ -152,6 +168,7 @@ class GameScene: SKScene {
         gameOverModalBackground.fillColor = .black
         self.addChild(gameOverModalBackground)
         
+        // Creates a foreground that lies on the background for the modal
         let gameOverModalForeground = SKShapeNode(rectOf: CGSize(width: 95, height: 145), cornerRadius: 5)
         gameOverModalForeground.setScale(4)
         gameOverModalForeground.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
@@ -160,6 +177,7 @@ class GameScene: SKScene {
         gameOverModalForeground.fillColor = .darkGray
         self.addChild(gameOverModalForeground)
         
+        // Creates the game over text for this modal
         let gameOverModalLabel = SKLabelNode(text: "GAME OVER!")
         gameOverModalLabel.horizontalAlignmentMode = .center
         gameOverModalLabel.position = CGPoint(x: self.size.width/2 , y: self.size.height/2 + 225)
@@ -169,12 +187,14 @@ class GameScene: SKScene {
         gameOverModalLabel.zPosition = 102
         self.addChild(gameOverModalLabel)
         
+        // Adds a button that is tied to the restart function that will restart the game
         let restartButton = Button(imageNamed: "restart_button_icon.png", initialAction: { self.restartGame() }, endingAction: {})
         restartButton.zPosition = 103
         restartButton.setScale(0.25)
         restartButton.position = CGPoint(x: self.size.width/2, y: (self.size.height/2) + 125)
         self.addChild(restartButton)
         
+        // Adds a button taht is tied to the goToMainMenu function that will end the game and go back to the main menu
         let quitButton = Button(imageNamed: "quit_button.png", initialAction: { self.goToMainMenu() }, endingAction: {})
         quitButton.zPosition = 103
         quitButton.setScale(0.30)
@@ -192,6 +212,7 @@ class GameScene: SKScene {
         gameState = .playGame
     }
     
+    // Game Manager should be a ViewController, which should remove this scene from the view
     func goToMainMenu() {
         gameManager?.quitGame()
     }

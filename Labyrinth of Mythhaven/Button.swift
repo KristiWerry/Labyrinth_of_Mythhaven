@@ -9,12 +9,13 @@
 import Foundation
 import SpriteKit
 
+// Creates generic buttons as an SKNode and using an image, provides button click indication by changing alpha values on a mask and the button itself
 class Button: SKNode {
     var button: SKSpriteNode
-    private var mask: SKSpriteNode
-    private var cropNode: SKCropNode
-    private var initAction: () -> Void
-    private var endAction: () -> Void
+    private var mask: SKSpriteNode // A dark mask to used to help indicate when a user has pressed the button
+    private var cropNode: SKCropNode // Helps overlay the mask on the button node
+    private var initAction: () -> Void // Function that gets called on button down press
+    private var endAction: () -> Void // Function that gets called on button release
     var isEnabled = true
     
     init(imageNamed: String, initialAction: @escaping () -> Void, endingAction: @escaping () -> Void ) {
@@ -32,7 +33,7 @@ class Button: SKNode {
         
         super.init()
         
-        isUserInteractionEnabled = true
+        isUserInteractionEnabled = true // Allows the user to interact with the SKNode
         
         setupNodes()
         addNodes()
@@ -51,16 +52,19 @@ class Button: SKNode {
         addChild(cropNode)
     }
     
+    // Button press down
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if isEnabled {
             mask.alpha = 0.5
+            // The animation scales then descales the button to help indicate button press
             let scale = SKAction.scale(by: 1.05, duration: 0.01)
             let reverseScale = scale.reversed()
             run(SKAction.sequence([scale, reverseScale]))
-            initAction()
+            initAction() // Calls the method that is associated with the initial press of the button
         }
     }
     
+    // Called when the button is being held
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if isEnabled {
             for touch in touches {
@@ -74,11 +78,13 @@ class Button: SKNode {
         }
     }
     
+    // Button is released
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         if isEnabled {
             for touch in touches {
                 let location = touch.location(in: self)
                 
+                // Animate button click behavior
                 if button.contains(location) {
                     disable()
                     endAction()
