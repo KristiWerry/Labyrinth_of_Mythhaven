@@ -28,4 +28,4 @@ Known bugs:
 - Ran out of time to fix bug where on certain IPhones the pause modal is off-center
 
 Here is the github repo:
-
+https://github.com/Writchie19/Labyrinth_of_Mythhaven.git
