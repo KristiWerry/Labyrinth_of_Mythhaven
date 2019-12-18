@@ -359,7 +359,6 @@
                                                     </attributedString>
                                                 </state>
                                                 <connections>
-                                                    <action selector="quitGame:" destination="BV1-FR-VrT" eventType="touchUpInside" id="1f5-tO-jo2"/>
                                                     <segue destination="JQf-Rt-e4e" kind="unwind" identifier="ReturnToMainMenu" animates="NO" unwindAction="unwindToMainMenuWithSender:" id="TRO-qY-oAU"/>
                                                 </connections>
                                             </button>

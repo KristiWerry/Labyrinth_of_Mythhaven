@@ -8,6 +8,7 @@
 
 import Foundation
 
+// Allows the scene to interact with the GameManager, which will likely be the parent controller that created the scene
 protocol GameManager {
     func quitGame()
 }

@@ -46,10 +46,12 @@ class MainViewController: UIViewController {
     @IBAction func updateInfo(_ sender: Any) {
     }
     
+    // Starts the game
     @IBAction func play(_ sender: Any) {
         self.performSegue(withIdentifier: "GameViewSegue", sender: self)
     }
     
+    // Neeeded in order to unwind from the scene
     @IBAction func unwindToMainMenu(sender: UIStoryboardSegue) {
         
     }

@@ -9,6 +9,7 @@
 import Foundation
 import SpriteKit
 
+// This protocol will allow for multiple different attack types
 protocol AttackProtocol {
     var monster: Monster { get set }
     func run(_ player: Player, gameScene: GameScene) -> SKAction

@@ -11,9 +11,11 @@ import UIKit
 import SpriteKit
 
 class Monster {
+    // Represents the states the monster can be in
     enum MonsterState {
         case attackNormal, attackUltimate, idle
         
+        // Used to pseudo randomly decide which attack pattern to use on the monsters next attack
         mutating func attack() {
             let rand = Int.random(in: 1...10)
             rand < 8 ? (self = .attackNormal) : (self = .attackUltimate)
@@ -23,8 +25,8 @@ class Monster {
     var monster: SKSpriteNode
     var monsterState: MonsterState
     var monsterHpBar: ProgressBar?
-    var textureArray = [SKTexture]()
-    var normalAttackTextureArray = [SKTexture]()
+    var textureArray = [SKTexture]() // Holds the animations for the monsters attack indicator
+    var normalAttackTextureArray = [SKTexture]() // Holds the animations for the normal attack
     var health: Int
     var attackStat: Int
     var isAlive: Bool
@@ -44,32 +46,33 @@ class Monster {
         normalAttackTextureArray.append(SKTexture(imageNamed: "snowball"))
     }
     
-    func animate() -> AttackProtocol{
-        return attack()
-    }
-    
     func attack() -> AttackProtocol {
-        monsterState.attack()
+        monsterState.attack() // choose the next attack pattern
         switch monsterState {
         case .attackNormal:
             return NormalAttack(self)
         case .attackUltimate:
-            return NormalAttack(self) // Change to ultimate when available
+            return NormalAttack(self) // Change to ultimate attack when available
         case .idle:
-            print("Default")
+            print("idle")
         }
         return NormalAttack(self)
     }
     
+    // Handle when the monster takes damage
     func takeDamage(_ amount: Int) {
         health -= amount
+        
+        // Check if the monster is still alive
         if health <= 0 {
             health = 0
             isAlive = false
         }
         
+        // Change the monsters hp bar according to the new health amount
         monsterHpBar?.progress = CGFloat(integerLiteral: health)
         if let progressBar = monsterHpBar {
+            // Change the hp bar color based on the monsters percent of remaining health
             if progressBar.progress <= CGFloat(progressBar.total / 2) && progressBar.progress > CGFloat(progressBar.total / 4) {
                 monsterHpBar?.bar?.color = .yellow
             } else if progressBar.progress <= CGFloat(progressBar.total / 4) {
@@ -78,6 +81,8 @@ class Monster {
         }
     }
     
+    
+    // Constructs the monsters hp bar
     func createMonsterHpBar(gameScene: GameScene) {
         //monster hp bar
         let monsterHpBackground = SKShapeNode(rectOf: CGSize(width: 180, height: 11), cornerRadius: 5)
