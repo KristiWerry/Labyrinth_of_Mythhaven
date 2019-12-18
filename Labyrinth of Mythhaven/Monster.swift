@@ -27,6 +27,7 @@ class Monster {
     var normalAttackTextureArray = [SKTexture]()
     var health: Int
     var attackStat: Int
+    var isAlive: Bool
 
     init (_ monsterNode: SKSpriteNode) {
         monster = monsterNode
@@ -34,6 +35,7 @@ class Monster {
         
         attackStat = 20
         health = 100
+        isAlive = true
         
         textureArray.append(SKTexture(imageNamed: "monster_1.png"))
         textureArray.append(SKTexture(imageNamed: "monster_2.png"))
@@ -61,6 +63,11 @@ class Monster {
     
     func takeDamage(_ amount: Int) {
         health -= amount
+        if health <= 0 {
+            health = 0
+            isAlive = false
+        }
+        
         monsterHpBar?.progress = CGFloat(integerLiteral: health)
         if let progressBar = monsterHpBar {
             if progressBar.progress <= CGFloat(progressBar.total / 2) && progressBar.progress > CGFloat(progressBar.total / 4) {

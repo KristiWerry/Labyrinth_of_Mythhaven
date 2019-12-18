@@ -54,7 +54,7 @@ class Button: SKNode {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         if isEnabled {
             mask.alpha = 0.5
-            let scale = SKAction.scale(by: 1.05, duration: 0.02)
+            let scale = SKAction.scale(by: 1.05, duration: 0.01)
             let reverseScale = scale.reversed()
             run(SKAction.sequence([scale, reverseScale]))
             initAction()
@@ -82,7 +82,7 @@ class Button: SKNode {
                 if button.contains(location) {
                     disable()
                     endAction()
-                    run(SKAction.sequence([SKAction.wait(forDuration: 0.2), SKAction.run {
+                    run(SKAction.sequence([SKAction.wait(forDuration: 0.05), SKAction.run {
                         self.enable()
                     }]))
                 }

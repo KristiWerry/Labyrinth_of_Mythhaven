@@ -31,6 +31,11 @@
 		D083E10023A7412800CC026A /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D083E0FF23A7412800CC026A /* ProgressBar.swift */; };
 		D0B8962E23A85CE300A023CF /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B8962D23A85CE300A023CF /* Button.swift */; };
 		D0B8963023A864CD00A023CF /* block_button_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D0B8962F23A864CD00A023CF /* block_button_icon.png */; };
+		DC2AACFB23A9958C00481E27 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC2AACFA23A9958C00481E27 /* MainViewController.swift */; };
+		DC7DB49323A9632A00E79163 /* restart_button_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DC7DB49223A9632A00E79163 /* restart_button_icon.png */; };
+		DC7DB49523A966AE00E79163 /* quit_button.png in Resources */ = {isa = PBXBuildFile; fileRef = DC7DB49423A966AE00E79163 /* quit_button.png */; };
+		DC7DB49723A96FB400E79163 /* GameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC7DB49623A96FB400E79163 /* GameManager.swift */; };
+		DC7DB49F23A9821E00E79163 /* pause_button_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DC7DB49E23A9821E00E79163 /* pause_button_icon.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,6 +86,11 @@
 		D0B8962C23A840D400A023CF /* Labyrinth of MythhavenUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Labyrinth of MythhavenUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0B8962D23A85CE300A023CF /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		D0B8962F23A864CD00A023CF /* block_button_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block_button_icon.png; sourceTree = "<group>"; };
+		DC2AACFA23A9958C00481E27 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
+		DC7DB49223A9632A00E79163 /* restart_button_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = restart_button_icon.png; sourceTree = "<group>"; };
+		DC7DB49423A966AE00E79163 /* quit_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = quit_button.png; sourceTree = "<group>"; };
+		DC7DB49623A96FB400E79163 /* GameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameManager.swift; sourceTree = "<group>"; };
+		DC7DB49E23A9821E00E79163 /* pause_button_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pause_button_icon.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,10 +133,12 @@
 		D083E0B423A4BD7000CC026A /* Labyrinth of Mythhaven */ = {
 			isa = PBXGroup;
 			children = (
+				DC7DB49223A9632A00E79163 /* restart_button_icon.png */,
 				D083E0B523A4BD7000CC026A /* AppDelegate.swift */,
 				D083E0B723A4BD7000CC026A /* GameScene.sks */,
 				D083E0B923A4BD7000CC026A /* Actions.sks */,
 				D083E0BB23A4BD7000CC026A /* GameScene.swift */,
+				DC7DB49423A966AE00E79163 /* quit_button.png */,
 				D0B8962F23A864CD00A023CF /* block_button_icon.png */,
 				D083E0FF23A7412800CC026A /* ProgressBar.swift */,
 				D083E0FB23A70BDE00CC026A /* AttackProtocol.swift */,
@@ -136,6 +148,7 @@
 				D083E0EF23A6E3DD00CC026A /* Monster.swift */,
 				D083E0BD23A4BD7000CC026A /* GameViewController.swift */,
 				D083E0BF23A4BD7000CC026A /* Main.storyboard */,
+				DC7DB49E23A9821E00E79163 /* pause_button_icon.png */,
 				D083E0C223A4BD7D00CC026A /* Assets.xcassets */,
 				D083E0C423A4BD7D00CC026A /* LaunchScreen.storyboard */,
 				D083E0C723A4BD7D00CC026A /* Info.plist */,
@@ -146,6 +159,8 @@
 				D083E0F223A7009300CC026A /* player_girl.png */,
 				D083E0F423A7009300CC026A /* player_girl1.png */,
 				D083E0F523A7009300CC026A /* player_girl2.png */,
+				DC7DB49623A96FB400E79163 /* GameManager.swift */,
+				DC2AACFA23A9958C00481E27 /* MainViewController.swift */,
 			);
 			path = "Labyrinth of Mythhaven";
 			sourceTree = "<group>";
@@ -276,9 +291,12 @@
 				D083E0C123A4BD7000CC026A /* Main.storyboard in Resources */,
 				D083E0B823A4BD7000CC026A /* GameScene.sks in Resources */,
 				D083E0F723A7009300CC026A /* player_girl.png in Resources */,
+				DC7DB49523A966AE00E79163 /* quit_button.png in Resources */,
 				D083E0EB23A5B9F100CC026A /* monster_2.png in Resources */,
 				D083E0F623A7009300CC026A /* player_girl_attack1.png in Resources */,
+				DC7DB49323A9632A00E79163 /* restart_button_icon.png in Resources */,
 				D083E0C323A4BD7D00CC026A /* Assets.xcassets in Resources */,
+				DC7DB49F23A9821E00E79163 /* pause_button_icon.png in Resources */,
 				D083E0FA23A7009300CC026A /* player_girl2.png in Resources */,
 				D0B8963023A864CD00A023CF /* block_button_icon.png in Resources */,
 				D083E0C623A4BD7D00CC026A /* LaunchScreen.storyboard in Resources */,
@@ -310,6 +328,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D083E0F023A6E3DD00CC026A /* Monster.swift in Sources */,
+				DC2AACFB23A9958C00481E27 /* MainViewController.swift in Sources */,
 				D083E0EE23A6D22A00CC026A /* Player.swift in Sources */,
 				D083E0FC23A70BDE00CC026A /* AttackProtocol.swift in Sources */,
 				D083E0FE23A70C9C00CC026A /* NormalAttack.swift in Sources */,
@@ -318,6 +337,7 @@
 				D083E10023A7412800CC026A /* ProgressBar.swift in Sources */,
 				D0B8962E23A85CE300A023CF /* Button.swift in Sources */,
 				D083E0B623A4BD7000CC026A /* AppDelegate.swift in Sources */,
+				DC7DB49723A96FB400E79163 /* GameManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
