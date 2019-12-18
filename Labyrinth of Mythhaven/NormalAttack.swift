@@ -20,15 +20,12 @@ class NormalAttack: AttackProtocol {
             let rand = Int.random(in: 1...10)
             if rand < 4 {
                 self = .left
-                print("left")
             }
             else if rand < 7 {
                 self = .middle
-                print("middle")
             }
             else {
                 self = .right
-                print("right")
             }
         }
     }

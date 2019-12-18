@@ -183,7 +183,7 @@ class GameScene: SKScene {
             attack, stop in
             attack.removeAllActions()
         })
-        sceneContext?.currentLevel  = 1
+        sceneContext?.currentLevel = 1
         createGameOverModal()
     }
     
@@ -294,70 +294,72 @@ class GameScene: SKScene {
         self.addChild(rightButton)
     }
     
+    // Handles transition to the next level
     func nextLevel() {
         if let currentLevel = sceneContext?.currentLevel, let finalLevel = sceneContext?.finalLevel {
             sceneContext?.currentLevel = currentLevel + 1
-            
+            // Check if the user has reached the end of the labyrinth
             if currentLevel == finalLevel {
-                print("You WIN!")
                 sceneContext?.finalLevel = Int.random(in: 4...10)
                 victory()
             }
-            
-            player?.levelUp()
-            sceneContext?.attack = player?.attackStat
-            sceneContext?.defense = player?.defenseStat
-            sceneContext?.hp = player?.health
-            restartGame()
+            else {
+                player?.levelUp()
+                sceneContext?.attack = player?.attackStat
+                sceneContext?.defense = player?.defenseStat
+                sceneContext?.hp = player?.health
+                restartGame()
+            }
         }
     }
     
     func createVictoryModal() {
         // Creates the background for the modal
-        let nextPathModalBackground = SKShapeNode(rectOf: CGSize(width: 100 , height: 150), cornerRadius: 5)
-        nextPathModalBackground.setScale(4)
-        nextPathModalBackground.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
-        nextPathModalBackground.zPosition = 101
-        nextPathModalBackground.strokeColor = .black
-        nextPathModalBackground.fillColor = .black
-        self.addChild(nextPathModalBackground)
+        let victoryModalBackground = SKShapeNode(rectOf: CGSize(width: 100 , height: 150), cornerRadius: 5)
+        victoryModalBackground.setScale(4)
+        victoryModalBackground.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
+        victoryModalBackground.zPosition = 104
+        victoryModalBackground.strokeColor = .black
+        victoryModalBackground.fillColor = .black
+        self.addChild(victoryModalBackground)
         
         // Creates a foreground that lies on the background for the modal
-        let nextPathModalForeground = SKShapeNode(rectOf: CGSize(width: 95, height: 145), cornerRadius: 5)
-        nextPathModalForeground.setScale(4)
-        nextPathModalForeground.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
-        nextPathModalForeground.zPosition = 102
-        nextPathModalForeground.strokeColor = .darkGray
-        nextPathModalForeground.fillColor = .darkGray
-        self.addChild(nextPathModalForeground)
+        let victoryModalForeground = SKShapeNode(rectOf: CGSize(width: 95, height: 145), cornerRadius: 5)
+        victoryModalForeground.setScale(4)
+        victoryModalForeground.position = CGPoint(x: self.size.width/2, y: self.size.height/2)
+        victoryModalForeground.zPosition = 105
+        victoryModalForeground.strokeColor = .darkGray
+        victoryModalForeground.fillColor = .darkGray
+        self.addChild(victoryModalForeground)
         
         // Creates the game over text for this modal
-        let nextPathModalLabel = SKLabelNode(text: "Congrats!")
-        nextPathModalLabel.horizontalAlignmentMode = .center
-        nextPathModalLabel.position = CGPoint(x: self.size.width/2 , y: self.size.height/2 + 225)
-        nextPathModalLabel.fontName = "AmericanTypewriter-Bold"
-        nextPathModalLabel.fontColor = UIColor.blue
-        nextPathModalLabel.fontSize = 45
-        nextPathModalLabel.zPosition = 102
-        self.addChild(nextPathModalLabel)
+        let victoryModalLabel = SKLabelNode(text: "Congrats!")
+        victoryModalLabel.horizontalAlignmentMode = .center
+        victoryModalLabel.position = CGPoint(x: self.size.width/2 , y: self.size.height/2 + 225)
+        victoryModalLabel.fontName = "AmericanTypewriter-Bold"
+        victoryModalLabel.fontColor = UIColor.blue
+        victoryModalLabel.fontSize = 45
+        victoryModalLabel.zPosition = 105
+        self.addChild(victoryModalLabel)
         
-        let nextPathModalLabel2 = SKLabelNode(text: "You made it!")
-        nextPathModalLabel2.horizontalAlignmentMode = .center
-        nextPathModalLabel2.position = CGPoint(x: self.size.width/2 , y: self.size.height/2 + 190)
-        nextPathModalLabel2.fontName = "AmericanTypewriter-Bold"
-        nextPathModalLabel2.fontColor = UIColor.blue
-        nextPathModalLabel2.fontSize = 35
-        nextPathModalLabel2.zPosition = 102
-        self.addChild(nextPathModalLabel2)
+        let victoryModalLabel2 = SKLabelNode(text: "You made it!")
+        victoryModalLabel2.horizontalAlignmentMode = .center
+        victoryModalLabel2.position = CGPoint(x: self.size.width/2 , y: self.size.height/2 + 190)
+        victoryModalLabel2.fontName = "AmericanTypewriter-Bold"
+        victoryModalLabel2.fontColor = UIColor.blue
+        victoryModalLabel2.fontSize = 35
+        victoryModalLabel2.zPosition = 105
+        self.addChild(victoryModalLabel2)
         
         // Adds a button that is tied to the next level function that will restart the game with a new level
-        let leftButton = Button(imageNamed: "continue_button.png", initialAction: { self.goToMainMenu() }, endingAction: {})
-        leftButton.zPosition = 103
-        leftButton.setScale(0.30)
-        leftButton.position = CGPoint(x: self.size.width/2, y: (self.size.height/2) + 125)
-        self.addChild(leftButton)
+        let continueButton = Button(imageNamed: "continue_button.png", initialAction: { self.goToMainMenu() }, endingAction: {})
+        continueButton.zPosition = 106
+        continueButton.setScale(0.30)
+        continueButton.position = CGPoint(x: self.size.width/2, y: (self.size.height/2) + 125)
+        self.addChild(continueButton)
     }
     
+    // Handles when the game ends and the player has completed the labrinth
     func victory() {
         gameState = .endGame
         
@@ -369,7 +371,7 @@ class GameScene: SKScene {
             attack, stop in
             attack.removeAllActions()
         })
-        
+        sceneContext?.currentLevel = 1
         createVictoryModal()
     }
 }

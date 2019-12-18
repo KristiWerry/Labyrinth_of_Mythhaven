@@ -9,6 +9,7 @@
 import Foundation
 
 class SceneContext {
+    // When the variables get set they also update in the UserDefaults, thus saving the players character stats on a per-session basis
     private var _name: String?
     var name: String? {
         get {

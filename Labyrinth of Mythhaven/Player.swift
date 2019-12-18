@@ -203,10 +203,8 @@ class Player {
     }
     
     func levelUp() {
-        attackStat += 5
+        attackStat += 2
         defenseStat += 5
         health += 50
-        
-        print("Attack: \(attackStat) , Defense: \(defenseStat) , Health: \(health)")
     }
 }
