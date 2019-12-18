@@ -2,9 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/williamritchie/Documents/Labyrinth_of_Mythhaven/Labyrinth_of_Mythhaven/Labyrinth of Mythhaven/restart_button_icon.png">
-   </FileRef>
-   <FileRef
       location = "self:">
    </FileRef>
 </Workspace>

@@ -9,5 +9,5 @@
 import Foundation
 
 protocol GameManager {
-    func creatGameOverModal()
+    func quitGame()
 }

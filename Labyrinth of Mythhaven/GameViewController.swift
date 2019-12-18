@@ -53,11 +53,19 @@ class GameViewController: UIViewController, GameManager {
         return true
     }
     
-    func creatGameOverModal() {
-        print("creating game over modal") // get rid of this
+    func quitGame() {
+        self.performSegue(withIdentifier: "ReturnToMainMenu", sender: self)
     }
+    
     @IBAction func pauseGame(_ sender: Any) {
         scene?.isPaused = !(scene?.isPaused)!
         pauseModal.isHidden = !pauseModal.isHidden
+    }
+    @IBAction func resumeGame(_ sender: Any) {
+        scene?.isPaused = !(scene?.isPaused)!
+        pauseModal.isHidden = !pauseModal.isHidden
+    }
+    @IBAction func quitGame(_ sender: Any) {
+        print("Quit Game")
     }
 }

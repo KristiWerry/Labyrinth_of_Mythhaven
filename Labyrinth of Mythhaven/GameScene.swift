@@ -193,6 +193,6 @@ class GameScene: SKScene {
     }
     
     func goToMainMenu() {
-        print("Return to main menu")
+        gameManager?.quitGame()
     }
 }
