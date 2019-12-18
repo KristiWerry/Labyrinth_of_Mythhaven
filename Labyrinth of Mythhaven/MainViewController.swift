@@ -9,11 +9,29 @@
 import UIKit
 
 class MainViewController: UIViewController {
-
+    @IBOutlet weak var nameLabel: UILabel!
+    @IBOutlet weak var hpLabel: UILabel!
+    @IBOutlet weak var attackLabel: UILabel!
+    @IBOutlet weak var defenseLabel: UILabel!
+    @IBOutlet weak var genderLabel: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Do any additional setup after loading the view.
+        let defaults = UserDefaults.standard
+        let name = defaults.string(forKey: "Name")
+        let gender = defaults.string(forKey: "Gender")
+        let hp = defaults.integer(forKey: "HP")
+        let attack = defaults.integer(forKey: "Attack")
+        let defense = defaults.integer(forKey: "Defense")
+        let level = defaults.integer(forKey: "Level")
+        
+        nameLabel.text = name
+        hpLabel.text = String(hp * level)
+        attackLabel.text = String(attack * level)
+        defenseLabel.text = String(defense * level)
+        genderLabel.text = gender
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -24,6 +42,8 @@ class MainViewController: UIViewController {
                 destination.modalPresentationStyle = .fullScreen
             }
         }
+    }
+    @IBAction func updateInfo(_ sender: Any) {
     }
     
     // Starts the game
