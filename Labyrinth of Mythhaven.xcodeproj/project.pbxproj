@@ -31,6 +31,7 @@
 		D083E10023A7412800CC026A /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = D083E0FF23A7412800CC026A /* ProgressBar.swift */; };
 		D0B8962E23A85CE300A023CF /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B8962D23A85CE300A023CF /* Button.swift */; };
 		D0B8963023A864CD00A023CF /* block_button_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D0B8962F23A864CD00A023CF /* block_button_icon.png */; };
+		D0B8963223A9BC8900A023CF /* SIgnInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0B8963123A9BC8900A023CF /* SIgnInViewController.swift */; };
 		DC2AACFB23A9958C00481E27 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC2AACFA23A9958C00481E27 /* MainViewController.swift */; };
 		DC7DB49323A9632A00E79163 /* restart_button_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = DC7DB49223A9632A00E79163 /* restart_button_icon.png */; };
 		DC7DB49523A966AE00E79163 /* quit_button.png in Resources */ = {isa = PBXBuildFile; fileRef = DC7DB49423A966AE00E79163 /* quit_button.png */; };
@@ -86,6 +87,7 @@
 		D0B8962C23A840D400A023CF /* Labyrinth of MythhavenUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Labyrinth of MythhavenUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0B8962D23A85CE300A023CF /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		D0B8962F23A864CD00A023CF /* block_button_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = block_button_icon.png; sourceTree = "<group>"; };
+		D0B8963123A9BC8900A023CF /* SIgnInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SIgnInViewController.swift; sourceTree = "<group>"; };
 		DC2AACFA23A9958C00481E27 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		DC7DB49223A9632A00E79163 /* restart_button_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = restart_button_icon.png; sourceTree = "<group>"; };
 		DC7DB49423A966AE00E79163 /* quit_button.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = quit_button.png; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				D083E0EF23A6E3DD00CC026A /* Monster.swift */,
 				D083E0BD23A4BD7000CC026A /* GameViewController.swift */,
 				D083E0BF23A4BD7000CC026A /* Main.storyboard */,
+				D0B8963123A9BC8900A023CF /* SIgnInViewController.swift */,
 				DC7DB49E23A9821E00E79163 /* pause_button_icon.png */,
 				D083E0C223A4BD7D00CC026A /* Assets.xcassets */,
 				D083E0C423A4BD7D00CC026A /* LaunchScreen.storyboard */,
@@ -331,6 +334,7 @@
 				DC2AACFB23A9958C00481E27 /* MainViewController.swift in Sources */,
 				D083E0EE23A6D22A00CC026A /* Player.swift in Sources */,
 				D083E0FC23A70BDE00CC026A /* AttackProtocol.swift in Sources */,
+				D0B8963223A9BC8900A023CF /* SIgnInViewController.swift in Sources */,
 				D083E0FE23A70C9C00CC026A /* NormalAttack.swift in Sources */,
 				D083E0BC23A4BD7000CC026A /* GameScene.swift in Sources */,
 				D083E0BE23A4BD7000CC026A /* GameViewController.swift in Sources */,
