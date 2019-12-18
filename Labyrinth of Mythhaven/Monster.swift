@@ -31,12 +31,12 @@ class Monster {
     var attackStat: Int
     var isAlive: Bool
 
-    init (_ monsterNode: SKSpriteNode) {
+    init (_ monsterNode: SKSpriteNode, _ level: Int) {
         monster = monsterNode
         monsterState = .idle
         
-        attackStat = 20
-        health = 100
+        attackStat = 20 * level
+        health = 400 * level
         isAlive = true
         
         textureArray.append(SKTexture(imageNamed: "monster_1.png"))
@@ -109,6 +109,15 @@ class Monster {
         monsterHpLabel.fontSize = 25
         monsterHpLabel.zPosition = 102
         gameScene.addChild(monsterHpLabel)
+        
+        let monsterNameLabel = SKLabelNode(text: "Toasty")
+        monsterNameLabel.horizontalAlignmentMode = .left
+        monsterNameLabel.position = CGPoint(x: gameScene.size.width/2 - 175 , y: gameScene.size.height * 0.85 + 25)
+        monsterNameLabel.fontName = "AmericanTypewriter"
+        monsterNameLabel.fontColor = UIColor.orange
+        monsterNameLabel.fontSize = 35
+        monsterNameLabel.zPosition = 102
+        gameScene.addChild(monsterNameLabel)
         
         monsterHpBar = {
             let progressBar = ProgressBar(color: .green, size: CGSize(width: 298, height: 20), totalProgress: CGFloat(integerLiteral: self.health))

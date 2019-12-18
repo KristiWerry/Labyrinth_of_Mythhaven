@@ -18,20 +18,7 @@ class MainViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        let defaults = UserDefaults.standard
-        let name = defaults.string(forKey: "Name")
-        let gender = defaults.string(forKey: "Gender")
-        let hp = defaults.integer(forKey: "HP")
-        let attack = defaults.integer(forKey: "Attack")
-        let defense = defaults.integer(forKey: "Defense")
-        let level = defaults.integer(forKey: "Level")
-        
-        nameLabel.text = name
-        hpLabel.text = String(hp * level)
-        attackLabel.text = String(attack * level)
-        defenseLabel.text = String(defense * level)
-        genderLabel.text = gender
-        
+        updateStats()
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -53,6 +40,21 @@ class MainViewController: UIViewController {
     
     // Neeeded in order to unwind from the scene
     @IBAction func unwindToMainMenu(sender: UIStoryboardSegue) {
+        updateStats()
+    }
+    
+    func updateStats() {
+        let defaults = UserDefaults.standard
+        let name = defaults.string(forKey: "Name")
+        let gender = defaults.string(forKey: "Gender")
+        let hp = defaults.integer(forKey: "HP")
+        let attack = defaults.integer(forKey: "Attack")
+        let defense = defaults.integer(forKey: "Defense")
         
+        nameLabel.text = name
+        hpLabel.text = String(hp)
+        attackLabel.text = String(attack)
+        defenseLabel.text = String(defense)
+        genderLabel.text = gender
     }
 }

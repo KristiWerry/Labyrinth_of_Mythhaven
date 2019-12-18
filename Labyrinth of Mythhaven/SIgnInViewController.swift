@@ -65,7 +65,7 @@ class SIgnInViewController: UIViewController, UIPickerViewDataSource, UIPickerVi
             defaults.set(4, forKey: "Attack")
             defaults.set(3, forKey: "Defense")
             defaults.set(100, forKey: "HP")
-            defaults.set(1, forKey: "Level")
+            defaults.set(1, forKey: "CurrentLevel")
             self.performSegue(withIdentifier: "MainViewSegue", sender: self)
         }
     }
